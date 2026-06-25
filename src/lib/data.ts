@@ -236,6 +236,11 @@ export const f1Data = [
     { Driver: "ALO", LapTime: 78815, LapTimeDelta: 4136, Team: "astonmartin", Color: "#00665f" }
 ]
 
+export const f1DataWithGap = f1Data.map((d, i) => ({
+    ...d,
+    Gap: i === 0 ? 0 : d.LapTime - f1Data[i - 1].LapTime
+}));
+
 export const results = [
     { name: 'HAM', ranks: [9, 5, 1, 5, 2, 1] },
     { name: 'RUS', ranks: [2, 2, 2, 1, 1, 2] },

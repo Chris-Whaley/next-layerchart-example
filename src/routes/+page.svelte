@@ -9,10 +9,17 @@
         LinearGradient,
         Layer,
         Spline,
+        Tooltip,
     } from "layerchart";
-    import { createDateSeries, f1Data, results } from "$lib/data";
+    import { createDateSeries, f1DataWithGap, results } from "$lib/data";
     import { scaleThreshold, scaleLinear, scalePoint } from "d3-scale";
     import { cls } from "@layerstack/tailwind";
+    import { formatLapTime, formatDelta } from "$lib/utils/format";
+
+    const f1DataWithGapWithGap = f1DataWithGap.map((d, i) => ({
+        ...d,
+        Gap: i === 0 ? 0 : d.LapTime - f1DataWithGap[i - 1].LapTime,
+    }));
 
     const data = createDateSeries({
         count: 30,
@@ -21,19 +28,9 @@
         value: "integer",
     });
 
-    const colorKeys = [...new Set(f1Data.map((driver) => driver.Team))];
-    const driverColors = [
-        "var(--color-mercedes)",
-        "var(--color-ferrari)",
-        "var(--color-mcclaren)",
-        "var(--color-redbull)",
-        "var(--color-racingbulls)",
-        "var(--color-audi)",
-        "var(--color-alpine)",
-        "var(--color-haas)",
-        "var(--color-williams)",
-        "var(--color-cadillac)",
-        "var(--color-astonmartin)",
+    const teamDomain = [...new Set(f1DataWithGap.map((d) => d.Team))];
+    const teamRange = [
+        ...new Map(f1DataWithGap.map((d) => [d.Team, d.Color])).values(),
     ];
 
     const sessions = ["FP2", "FP3", "Q1", "Q2", "Q", "R"];
@@ -76,16 +73,38 @@
 
 <h2>F1</h2>
 <BarChart
-    data={f1Data}
+    data={f1DataWithGap}
     x="LapTimeDelta"
     y="Driver"
     c="Team"
     orientation="horizontal"
-    cDomain={colorKeys}
-    cRange={driverColors}
+    cDomain={teamDomain}
+    cRange={teamRange}
+    props={{ xAxis: { format: formatDelta } }}
     padding={defaultChartPadding({ left: 50, right: 50 })}
     height={600}
-/>
+>
+    {#snippet tooltip({ context })}
+        {@const data = context.tooltip.data}
+        <Tooltip.Root>
+            <Tooltip.Header value={data.Driver} />
+            <Tooltip.List>
+                <Tooltip.Item
+                    label="Time"
+                    value={formatLapTime(data.LapTime)}
+                />
+                <Tooltip.Item
+                    label="Delta"
+                    value={formatDelta(data.LapTimeDelta)}
+                />
+                <Tooltip.Item
+                    label="Gap"
+                    value={data.Gap === 0 ? "—" : formatDelta(data.Gap)}
+                />
+            </Tooltip.List>
+        </Tooltip.Root>
+    {/snippet}
+</BarChart>
 
 <Chart
     data={sessionData}
