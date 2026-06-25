@@ -1,1 +1,17 @@
 @import "tailwindcss";
+
+.lc-root-container {
+    --color-danger: var(--color-red-400);
+    --color-success: var(--color-green-400);
+    --color-mercedes: #27f4d2;
+    --color-ferrari: #e80020;
+    --color-mcclaren: #ff8000;
+    --color-redbull: #0600ef;
+    --color-racingbulls: #fcd700;
+    --color-audi: #ff2d00;
+    --color-alpine: #ff87bc;
+    --color-haas: #b6babd;
+    --color-williams: #00a0dd;
+    --color-astonmartin: #00665f;
+    --color-cadillac: #444444;
+}

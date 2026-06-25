@@ -211,6 +211,31 @@ export const longData = [
     { year: 2016, basket: 2, fruit: 'grapes', value: 400 }
 ];
 
+export const f1Data = [
+    { Driver: "RUS", LapTime: 74679, LapTimeDelta: 0, Team: "mercedes", Color: "#27f4d2" },
+    { Driver: "HAM", LapTime: 74743, LapTimeDelta: 64, Team: "ferrari", Color: "#e80020" },
+    { Driver: "ANT", LapTime: 74998, LapTimeDelta: 319, Team: "mercedes", Color: "#27f4d2" },
+    { Driver: "NOR", LapTime: 75001, LapTimeDelta: 322, Team: "mcclaren", Color: "#ff8000" },
+    { Driver: "VER", LapTime: 75021, LapTimeDelta: 342, Team: "redbull", Color: "#0600ef" },
+    { Driver: "HAD", LapTime: 75077, LapTimeDelta: 398, Team: "redbull", Color: "#0600ef" },
+    { Driver: "PIA", LapTime: 75090, LapTimeDelta: 411, Team: "mcclaren", Color: "#ff8000" },
+    { Driver: "LEC", LapTime: 75281, LapTimeDelta: 602, Team: "ferrari", Color: "#e80020" },
+    { Driver: "LAW", LapTime: 75585, LapTimeDelta: 906, Team: "racingbulls", Color: "#fcd700" },
+    { Driver: "HUL", LapTime: 75768, LapTimeDelta: 1089, Team: "audi", Color: "#ff2d00" },
+    { Driver: "LIN", LapTime: 75840, LapTimeDelta: 1161, Team: "racingbulls", Color: "#fcd700" },
+    { Driver: "BOR", LapTime: 76001, LapTimeDelta: 1322, Team: "audi", Color: "#ff2d00" },
+    { Driver: "COL", LapTime: 76191, LapTimeDelta: 1512, Team: "alpine", Color: "#ff87bc" },
+    { Driver: "GAS", LapTime: 76261, LapTimeDelta: 1582, Team: "alpine", Color: "#ff87bc" },
+    { Driver: "BEA", LapTime: 76389, LapTimeDelta: 1710, Team: "haas", Color: "#b6babd" },
+    { Driver: "SAI", LapTime: 76881, LapTimeDelta: 2202, Team: "williams", Color: "#00a0dd" },
+    { Driver: "OCO", LapTime: 77073, LapTimeDelta: 2394, Team: "haas", Color: "#b6babd" },
+    { Driver: "ALB", LapTime: 77424, LapTimeDelta: 2745, Team: "williams", Color: "#00a0dd" },
+    { Driver: "PER", LapTime: 77545, LapTimeDelta: 2866, Team: "cadillac", Color: "#444444" },
+    { Driver: "BOT", LapTime: 77757, LapTimeDelta: 3078, Team: "cadillac", Color: "#444444" },
+    { Driver: "STR", LapTime: 78758, LapTimeDelta: 4079, Team: "astonmartin", Color: "#00665f" },
+    { Driver: "ALO", LapTime: 78815, LapTimeDelta: 4136, Team: "astonmartin", Color: "#00665f" }
+]
+
 export function getPhyllotaxis({
     radius,
     count,
