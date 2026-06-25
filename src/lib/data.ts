@@ -236,6 +236,31 @@ export const f1Data = [
     { Driver: "ALO", LapTime: 78815, LapTimeDelta: 4136, Team: "astonmartin", Color: "#00665f" }
 ]
 
+export const results = [
+    { name: 'HAM', ranks: [9, 5, 1, 5, 2, 1] },
+    { name: 'RUS', ranks: [2, 2, 2, 1, 1, 2] },
+    { name: 'NOR', ranks: [1, 4, 7, 4, 4, 3] },
+    { name: 'VER', ranks: [6, 6, 8, 6, 5, 4] },
+    { name: 'PIA', ranks: [3, 2, 6, 7, 7, 5] },
+    { name: 'HAD', ranks: [10, 8, 10, 9, 6, 6] },
+    { name: 'GAS', ranks: [16, 13, 13, 14, 14, 7] },
+    { name: 'LAW', ranks: [13, 12, 15, 8, 8, 8] },
+    { name: 'LIN', ranks: [7, 10, 9, 11, 11, 9] },
+    { name: 'COL', ranks: [15, 14, 12, 13, 13, 10] },
+    { name: 'BOR', ranks: [8, 11, 14, 12, 12, 11] },
+    { name: 'SAI', ranks: [14, 15, 16, 16, 16, 12] },
+    { name: 'OCO', ranks: [17, 16, 17, 17, 17, 13] },
+    { name: 'PER', ranks: [20, 19, 19, 19, 19, 14] },
+    { name: 'LEC', ranks: [4, 3, 3, 2, 10, 22] },
+    { name: 'ANT', ranks: [5, 7, 4, 3, 3, 22] },
+    { name: 'BEA', ranks: [12, 17, 11, 15, 15, 22] },
+    { name: 'ALB', ranks: [19, 18, 18, 18, 18, 22] },
+    { name: 'ALO', ranks: [21, 20, 22, 22, 22, 22] },
+    { name: 'HUL', ranks: [11, 9, 5, 10, 9, 22] },
+    { name: 'BOT', ranks: [18, 21, 20, 20, 20, 22] },
+    { name: 'STR', ranks: [22, 22, 21, 21, 21, 22] }
+]
+
 export function getPhyllotaxis({
     radius,
     count,
