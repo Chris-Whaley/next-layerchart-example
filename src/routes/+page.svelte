@@ -80,6 +80,17 @@
     const lapsScale = scaleLinear([0, numberOfLaps]);
     const chartData = createStintChartData(stints as Stint[]);
     const raceDistance = getRaceDistance(chartData);
+
+    const driverOrder = results
+        .map((r) => ({
+            name: r.name,
+            finalRank: r.ranks[r.ranks.length - 1],
+            totalLaps: stints
+                .filter((s) => s.Driver === r.name)
+                .reduce((sum, s) => sum + s.StintLength, 0),
+        }))
+        .sort((a, b) => a.finalRank - b.finalRank || b.totalLaps - a.totalLaps)
+        .map((d) => d.name);
 </script>
 
 <h1>Welcome to My Project</h1>
@@ -251,12 +262,14 @@
     data={chartData}
     x={["start", "end"]}
     y={(d) => d.Driver}
+    yDomain={driverOrder}
     c="Compound"
     cDomain={["SOFT", "MEDIUM", "HARD"]}
     cRange={["#da291c", "#ffd12e", "#f0f0ec"]}
     xBaseline={0}
     xNice={false}
     bandPadding={0.2}
+    padding={defaultChartPadding({ left: 50, right: 50 })}
     orientation="horizontal"
     height={500}
     props={{
@@ -269,26 +282,26 @@
         {@const data = context.tooltip?.data}
 
         {#if data}
+            {@const duration = data.end - data.start}
+            {@const color = compoundColors[data.Compound]}
             <Tooltip.Root>
                 <div class="space-y-1 min-w-[140px]">
                     <div class="font-bold">{data.Driver}</div>
 
-                    <div class="flex items-center gap-2">
-                        <span
-                            class="w-2.5 h-2.5 rounded-full inline-block"
-                            style="background-color: {compoundColors[
-                                data.Compound
-                            ]}"
-                        />
-                        <span>{data.Compound}</span>
+                    <div
+                        class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold border"
+                        style="
+                            background-color: {color}20;
+                            border-color: {color};
+                            color: {data.Compound === 'HARD' ? '#111' : '#000'};
+                            "
+                    >
+                        {data.Compound}
                     </div>
 
                     <div class="opacity-80">
-                        Laps: {data.start} → {data.end}
-                    </div>
-
-                    <div class="opacity-80">
-                        Stint: {data.end - data.start} laps
+                        Lap {data.start}–{data.end}
+                        <span class="opacity-80">({duration} laps)</span>
                     </div>
                 </div>
             </Tooltip.Root>
