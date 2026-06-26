@@ -266,6 +266,79 @@ export const results = [
     { name: 'STR', ranks: [22, 22, 21, 21, 21, 22] }
 ]
 
+export const stints = [{ "Driver": "ALB", "Stint": 1.0, "Compound": "MEDIUM", "StintLength": 13 }, { "Driver": "ALB", "Stint": 2.0, "Compound": "HARD", "StintLength": 16 }, { "Driver": "ALB", "Stint": 3.0, "Compound": "HARD", "StintLength": 5 }, { "Driver": "ALB", "Stint": 4.0, "Compound": "SOFT", "StintLength": 16 }, { "Driver": "ALB", "Stint": 5.0, "Compound": "SOFT", "StintLength": 5 }, { "Driver": "ALO", "Stint": 1.0, "Compound": "HARD", "StintLength": 21 }, { "Driver": "ALO", "Stint": 2.0, "Compound": "HARD", "StintLength": 17 }, { "Driver": "ANT", "Stint": 1.0, "Compound": "MEDIUM", "StintLength": 14 }, { "Driver": "ANT", "Stint": 2.0, "Compound": "HARD", "StintLength": 23 }, { "Driver": "ANT", "Stint": 3.0, "Compound": "HARD", "StintLength": 25 }, { "Driver": "BEA", "Stint": 1.0, "Compound": "MEDIUM", "StintLength": 18 }, { "Driver": "BEA", "Stint": 2.0, "Compound": "HARD", "StintLength": 21 }, { "Driver": "BEA", "Stint": 3.0, "Compound": "SOFT", "StintLength": 21 }, { "Driver": "BOR", "Stint": 1.0, "Compound": "MEDIUM", "StintLength": 15 }, { "Driver": "BOR", "Stint": 2.0, "Compound": "HARD", "StintLength": 18 }, { "Driver": "BOR", "Stint": 3.0, "Compound": "HARD", "StintLength": 20 }, { "Driver": "BOR", "Stint": 4.0, "Compound": "SOFT", "StintLength": 11 }, { "Driver": "BOT", "Stint": 1.0, "Compound": "MEDIUM", "StintLength": 14 }, { "Driver": "BOT", "Stint": 2.0, "Compound": "HARD", "StintLength": 1 }, { "Driver": "COL", "Stint": 1.0, "Compound": "SOFT", "StintLength": 12 }, { "Driver": "COL", "Stint": 2.0, "Compound": "HARD", "StintLength": 22 }, { "Driver": "COL", "Stint": 3.0, "Compound": "HARD", "StintLength": 31 }, { "Driver": "GAS", "Stint": 1.0, "Compound": "MEDIUM", "StintLength": 14 }, { "Driver": "GAS", "Stint": 2.0, "Compound": "HARD", "StintLength": 26 }, { "Driver": "GAS", "Stint": 3.0, "Compound": "HARD", "StintLength": 25 }, { "Driver": "HAD", "Stint": 1.0, "Compound": "MEDIUM", "StintLength": 15 }, { "Driver": "HAD", "Stint": 2.0, "Compound": "HARD", "StintLength": 17 }, { "Driver": "HAD", "Stint": 3.0, "Compound": "HARD", "StintLength": 26 }, { "Driver": "HAD", "Stint": 4.0, "Compound": "SOFT", "StintLength": 7 }, { "Driver": "HAM", "Stint": 1.0, "Compound": "SOFT", "StintLength": 11 }, { "Driver": "HAM", "Stint": 2.0, "Compound": "HARD", "StintLength": 16 }, { "Driver": "HAM", "Stint": 3.0, "Compound": "MEDIUM", "StintLength": 14 }, { "Driver": "HAM", "Stint": 4.0, "Compound": "HARD", "StintLength": 25 }, { "Driver": "HUL", "Stint": 1.0, "Compound": "SOFT", "StintLength": 13 }, { "Driver": "HUL", "Stint": 2.0, "Compound": "HARD", "StintLength": 16 }, { "Driver": "LAW", "Stint": 1.0, "Compound": "MEDIUM", "StintLength": 11 }, { "Driver": "LAW", "Stint": 2.0, "Compound": "HARD", "StintLength": 24 }, { "Driver": "LAW", "Stint": 3.0, "Compound": "HARD", "StintLength": 30 }, { "Driver": "LEC", "Stint": 1.0, "Compound": "MEDIUM", "StintLength": 16 }, { "Driver": "LEC", "Stint": 2.0, "Compound": "HARD", "StintLength": 23 }, { "Driver": "LEC", "Stint": 3.0, "Compound": "HARD", "StintLength": 23 }, { "Driver": "LIN", "Stint": 1.0, "Compound": "MEDIUM", "StintLength": 22 }, { "Driver": "LIN", "Stint": 2.0, "Compound": "HARD", "StintLength": 15 }, { "Driver": "LIN", "Stint": 3.0, "Compound": "HARD", "StintLength": 28 }, { "Driver": "NOR", "Stint": 1.0, "Compound": "MEDIUM", "StintLength": 13 }, { "Driver": "NOR", "Stint": 2.0, "Compound": "HARD", "StintLength": 22 }, { "Driver": "NOR", "Stint": 3.0, "Compound": "HARD", "StintLength": 31 }, { "Driver": "OCO", "Stint": 1.0, "Compound": "SOFT", "StintLength": 13 }, { "Driver": "OCO", "Stint": 2.0, "Compound": "HARD", "StintLength": 21 }, { "Driver": "OCO", "Stint": 3.0, "Compound": "MEDIUM", "StintLength": 24 }, { "Driver": "OCO", "Stint": 4.0, "Compound": "SOFT", "StintLength": 6 }, { "Driver": "PER", "Stint": 1.0, "Compound": "SOFT", "StintLength": 12 }, { "Driver": "PER", "Stint": 2.0, "Compound": "HARD", "StintLength": 19 }, { "Driver": "PER", "Stint": 3.0, "Compound": "HARD", "StintLength": 8 }, { "Driver": "PER", "Stint": 4.0, "Compound": "MEDIUM", "StintLength": 24 }, { "Driver": "PIA", "Stint": 1.0, "Compound": "MEDIUM", "StintLength": 14 }, { "Driver": "PIA", "Stint": 2.0, "Compound": "HARD", "StintLength": 22 }, { "Driver": "PIA", "Stint": 3.0, "Compound": "HARD", "StintLength": 30 }, { "Driver": "RUS", "Stint": 1.0, "Compound": "MEDIUM", "StintLength": 12 }, { "Driver": "RUS", "Stint": 2.0, "Compound": "HARD", "StintLength": 24 }, { "Driver": "RUS", "Stint": 3.0, "Compound": "HARD", "StintLength": 30 }, { "Driver": "SAI", "Stint": 1.0, "Compound": "SOFT", "StintLength": 14 }, { "Driver": "SAI", "Stint": 2.0, "Compound": "HARD", "StintLength": 16 }, { "Driver": "SAI", "Stint": 3.0, "Compound": "HARD", "StintLength": 25 }, { "Driver": "SAI", "Stint": 4.0, "Compound": "MEDIUM", "StintLength": 9 }, { "Driver": "STR", "Stint": 1.0, "Compound": "HARD", "StintLength": 5 }, { "Driver": "VER", "Stint": 1.0, "Compound": "SOFT", "StintLength": 12 }, { "Driver": "VER", "Stint": 2.0, "Compound": "MEDIUM", "StintLength": 17 }, { "Driver": "VER", "Stint": 3.0, "Compound": "HARD", "StintLength": 11 }, { "Driver": "VER", "Stint": 4.0, "Compound": "MEDIUM", "StintLength": 26 }]
+
+// In $lib/data.ts
+export const stintData = (() => {
+    const result: { Driver: string; Stint: number; Compound: string; StintLength: number; Start: number }[] = [];
+    const drivers = [...new Set(stints.map(d => d.Driver))];
+    for (const driver of drivers) {
+        let offset = 0;
+        for (const row of stints.filter(d => d.Driver === driver)) {
+            result.push({ ...row, Start: offset });
+            offset += row.StintLength;
+        }
+    }
+    return result;
+})();
+
+// chatgpt
+// chartData.ts
+
+export interface Stint {
+    Driver: string;
+    Stint: number;
+    Compound: string;
+    StintLength: number;
+}
+
+export interface ChartStint {
+    driver: string;
+    stint: number;
+    compound: string;
+    length: number;
+    start: number;
+    end: number;
+}
+
+export function createStintChartData(stints: Stint[]): ChartStint[] {
+    const chartData: ChartStint[] = [];
+
+    const grouped = Object.groupBy(stints, d => d.Driver);
+
+    for (const [driver, driverStints] of Object.entries(grouped)) {
+        if (!driverStints) continue;
+
+        let start = 0;
+
+        driverStints
+            .toSorted((a, b) => a.Stint - b.Stint)
+            .forEach((stint) => {
+                const end = start + stint.StintLength;
+
+                chartData.push({
+                    Driver: driver,
+                    Stint: stint.Stint,
+                    Compound: stint.Compound,
+                    start,
+                    end
+                });
+
+                start = end;
+            });
+    }
+
+    return chartData;
+}
+export function getDrivers(stints: Stint[]) {
+    return [...new Set(stints.map(d => d.Driver))];
+}
+
+export function getRaceDistance(chartData: ChartStint[]) {
+    return Math.max(...chartData.map(d => d.end));
+}
+
+
 export function getPhyllotaxis({
     radius,
     count,

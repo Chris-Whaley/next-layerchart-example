@@ -11,3 +11,11 @@ export const formatDelta = (ms: number) => {
     const mill = ms % 1000;
     return `+${s}.${String(mill).padStart(3, "0")}`;
 };
+
+export function compoundColor(compound: string): string {
+    return {
+        SOFT: "#e8002d",
+        MEDIUM: "#ffd700",
+        HARD: "#c8c8c8",
+    }[compound] ?? "#888";
+}

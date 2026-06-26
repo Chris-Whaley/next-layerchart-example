@@ -10,16 +10,27 @@
         Layer,
         Spline,
         Tooltip,
+        Svg,
+        Rect,
     } from "layerchart";
-    import { createDateSeries, f1DataWithGap, results } from "$lib/data";
+    import {
+        createDateSeries,
+        f1DataWithGap,
+        results,
+        stintData,
+        stints,
+        createStintChartData,
+        getDrivers,
+        getRaceDistance,
+    } from "$lib/data";
+    import type { Stint } from "$lib/data";
     import { scaleThreshold, scaleLinear, scalePoint } from "d3-scale";
     import { cls } from "@layerstack/tailwind";
-    import { formatLapTime, formatDelta } from "$lib/utils/format";
-
-    const f1DataWithGapWithGap = f1DataWithGap.map((d, i) => ({
-        ...d,
-        Gap: i === 0 ? 0 : d.LapTime - f1DataWithGap[i - 1].LapTime,
-    }));
+    import {
+        formatLapTime,
+        formatDelta,
+        compoundColor,
+    } from "$lib/utils/format";
 
     const data = createDateSeries({
         count: 30,
@@ -41,10 +52,34 @@
         }
         return row;
     });
-    const maxRank = 51;
-    const rowHeight = 14;
+    const maxRank = 22;
+    const rowHeight = 20;
     const keys = results.map((r) => r.name);
     let hoveredState = $state<string | null>(null);
+
+    const drivers = [...new Set(sessionData.map((d) => d.Driver))];
+
+    // One "series" per compound type, with data pre-filtered
+    const compounds = ["SOFT", "MEDIUM", "HARD"];
+
+    const compoundColors: Record<string, string> = {
+        SOFT: "#e8002d",
+        MEDIUM: "#ffd700",
+        HARD: "#c8c8c8",
+    };
+
+    const stintSeries = compounds.map((compound) => ({
+        key: compound,
+        label: compound,
+        color: compoundColors[compound],
+        data: stintData.filter((d) => d.Compound === compound),
+        value: "StintLength",
+    }));
+
+    const numberOfLaps = 66;
+    const lapsScale = scaleLinear([0, numberOfLaps]);
+    const chartData = createStintChartData(stints as Stint[]);
+    const raceDistance = getRaceDistance(chartData);
 </script>
 
 <h1>Welcome to My Project</h1>
@@ -211,3 +246,52 @@
         </Layer>
     {/snippet}
 </Chart>
+
+<BarChart
+    data={chartData}
+    x={["start", "end"]}
+    y={(d) => d.Driver}
+    c="Compound"
+    cDomain={["SOFT", "MEDIUM", "HARD"]}
+    cRange={["#da291c", "#ffd12e", "#f0f0ec"]}
+    xBaseline={0}
+    xNice={false}
+    bandPadding={0.2}
+    orientation="horizontal"
+    height={500}
+    props={{
+        tooltip: {
+            context: { mode: "bounds" },
+        },
+    }}
+>
+    {#snippet tooltip({ context })}
+        {@const data = context.tooltip?.data}
+
+        {#if data}
+            <Tooltip.Root>
+                <div class="space-y-1 min-w-[140px]">
+                    <div class="font-bold">{data.Driver}</div>
+
+                    <div class="flex items-center gap-2">
+                        <span
+                            class="w-2.5 h-2.5 rounded-full inline-block"
+                            style="background-color: {compoundColors[
+                                data.Compound
+                            ]}"
+                        />
+                        <span>{data.Compound}</span>
+                    </div>
+
+                    <div class="opacity-80">
+                        Laps: {data.start} → {data.end}
+                    </div>
+
+                    <div class="opacity-80">
+                        Stint: {data.end - data.start} laps
+                    </div>
+                </div>
+            </Tooltip.Root>
+        {/if}
+    {/snippet}
+</BarChart>
