@@ -1,3 +1,5 @@
+import { quantile, min, max } from "d3-array";
+
 export const formatLapTime = (ms: number) => {
     const m = Math.floor(ms / 60000);
     const s = Math.floor((ms % 60000) / 1000);
@@ -18,4 +20,23 @@ export function compoundColor(compound: string): string {
         MEDIUM: "#ffd700",
         HARD: "#c8c8c8",
     }[compound] ?? "#888";
+}
+
+export function rangeLoop(start: number, end: number) {
+    const result = [];
+    for (let i = start; i <= end; i++) {
+        result.push(i);
+    }
+    return result;
+}
+
+export function getStats(times: number[]) {
+    const sorted = [...times].sort((a, b) => a - b);
+    return {
+        min: min(sorted)!,
+        q1: quantile(sorted, 0.25)!,
+        median: quantile(sorted, 0.5)!,
+        q3: quantile(sorted, 0.75)!,
+        max: max(sorted)!,
+    };
 }

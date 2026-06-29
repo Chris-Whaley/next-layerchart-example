@@ -3,7 +3,6 @@
 @import '@layerstack/tailwind/utils.css';
 @import '@layerstack/tailwind/themes/basic.css';
 
-@source '../node_modules/svelte-ux/dist';
 
 .lc-root-container {
     --color-danger: var(--color-red-400);
@@ -19,4 +18,50 @@
     --color-williams: #00a0dd;
     --color-astonmartin: #00665f;
     --color-cadillac: #444444;
+}
+
+:root {
+    --color-surface-100: oklch(1 0 0);
+    /* white */
+    --color-surface-200: oklch(0.95 0 0);
+    /* light gray */
+    --color-surface-300: oklch(0.90 0 0);
+    --color-surface-content: oklch(0.15 0 0);
+    /* near black */
+    --color-success: oklch(0.6 0.15 145);
+    --color-danger: oklch(0.55 0.2 25);
+    --color-success-300: oklch(0.75 0.15 145);
+    --color-success-700: oklch(0.45 0.15 145);
+    --color-danger-300: oklch(0.7 0.2 25);
+    --color-danger-700: oklch(0.4 0.2 25);
+}
+
+.dark {
+    --color-surface-100: oklch(0.15 0 0);
+    /* near black */
+    --color-surface-200: oklch(0.2 0 0);
+    /* dark gray */
+    --color-surface-300: oklch(0.25 0 0);
+    --color-surface-content: oklch(0.95 0 0);
+    /* near white */
+    --color-success: oklch(0.65 0.15 145);
+    --color-danger: oklch(0.6 0.2 25);
+    --color-success-300: oklch(0.75 0.15 145);
+    --color-success-700: oklch(0.45 0.15 145);
+    --color-danger-300: oklch(0.7 0.2 25);
+    --color-danger-700: oklch(0.4 0.2 25);
+}
+
+@theme inline {
+    --color-surface-100: var(--color-surface-100);
+    --color-surface-200: var(--color-surface-200);
+    --color-surface-300: var(--color-surface-300);
+    --color-surface-content: var(--color-surface-content);
+    --color-success: var(--color-success);
+    --color-danger: var(--color-danger);
+}
+
+body {
+    background-color: var(--color-surface-100);
+    color: var(--color-surface-content);
 }

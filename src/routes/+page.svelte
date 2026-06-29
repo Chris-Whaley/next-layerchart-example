@@ -4,14 +4,15 @@
         LineChart,
         defaultChartPadding,
         BarChart,
+        BoxPlot,
         Chart,
         Axis,
         LinearGradient,
         Layer,
         Spline,
-        Tooltip,
         Svg,
-        Rect,
+        Tooltip,
+        Violin,
     } from "layerchart";
     import {
         createDateSeries,
@@ -22,15 +23,32 @@
         createStintChartData,
         getDrivers,
         getRaceDistance,
+        positions,
+        lapTimes,
+        violinData,
+        teamColors,
     } from "$lib/data";
     import type { Stint } from "$lib/data";
-    import { scaleThreshold, scaleLinear, scalePoint } from "d3-scale";
+    import {
+        scaleBand,
+        scaleThreshold,
+        scaleLinear,
+        scalePoint,
+    } from "d3-scale";
+    import { quantile, min, max } from "d3-array";
     import { cls } from "@layerstack/tailwind";
     import {
         formatLapTime,
         formatDelta,
         compoundColor,
+        rangeLoop,
+        getStats,
     } from "$lib/utils/format";
+    let isDark = $state(false);
+
+    $effect(() => {
+        isDark = document.documentElement.classList.contains("dark");
+    });
 
     const data = createDateSeries({
         count: 30,
@@ -55,7 +73,10 @@
     const maxRank = 22;
     const rowHeight = 20;
     const keys = results.map((r) => r.name);
-    let hoveredState = $state<string | null>(null);
+    let hoveredQualifying = $state<string | null>(null);
+    let hoveredRace = $state<string | null>(null);
+    let hoveredStints = $state<string | null>(null);
+    let hoveredSessions = $state<string | null>(null);
 
     const drivers = [...new Set(sessionData.map((d) => d.Driver))];
 
@@ -65,19 +86,10 @@
     const compoundColors: Record<string, string> = {
         SOFT: "#e8002d",
         MEDIUM: "#ffd700",
-        HARD: "#c8c8c8",
+        HARD: "#f0f0ec",
     };
 
-    const stintSeries = compounds.map((compound) => ({
-        key: compound,
-        label: compound,
-        color: compoundColors[compound],
-        data: stintData.filter((d) => d.Compound === compound),
-        value: "StintLength",
-    }));
-
     const numberOfLaps = 66;
-    const lapsScale = scaleLinear([0, numberOfLaps]);
     const chartData = createStintChartData(stints as Stint[]);
     const raceDistance = getRaceDistance(chartData);
 
@@ -91,6 +103,30 @@
         }))
         .sort((a, b) => a.finalRank - b.finalRank || b.totalLaps - a.totalLaps)
         .map((d) => d.name);
+
+    let laps = rangeLoop(1, numberOfLaps);
+    const lapData = laps.map((lap, i) => {
+        const row: Record<string, string | number> = { lap };
+        for (const driver of positions) {
+            row[driver.Driver] = driver.Position[i] ?? driver.FinishPosition;
+        }
+        return row;
+    });
+    const driverResults = positions.map((d) => ({
+        name: d.Driver,
+        ranks: d.Position,
+    }));
+    const sortedViolinData = [...violinData].sort((a, b) => {
+        const medianA = quantile(
+            [...a.LapTimes].sort((x, y) => x - y),
+            0.5,
+        )!;
+        const medianB = quantile(
+            [...b.LapTimes].sort((x, y) => x - y),
+            0.5,
+        )!;
+        return medianA - medianB;
+    });
 </script>
 
 <h1>Welcome to My Project</h1>
@@ -117,7 +153,7 @@
     height={300}
 />
 
-<h2>F1</h2>
+<h2>Qualifying Results</h2>
 <BarChart
     data={f1DataWithGap}
     x="LapTimeDelta"
@@ -152,6 +188,7 @@
     {/snippet}
 </BarChart>
 
+<h2>Session Results</h2>
 <Chart
     data={sessionData}
     x="session"
@@ -165,11 +202,11 @@
     {#snippet children({ context })}
         <Layer>
             <LinearGradient
-                id="gradient-improved"
+                id="sessions-gradient-improved"
                 stops={["var(--color-success-700)", "var(--color-success-300)"]}
             />
             <LinearGradient
-                id="gradient-declined"
+                id="sessions-gradient-declined"
                 stops={["var(--color-danger-300)", "var(--color-danger-700)"]}
             />
 
@@ -179,11 +216,11 @@
             <!-- Lines (one Spline per state) -->
             {#each results as result (result.name)}
                 {@const dimmed =
-                    hoveredState !== null && hoveredState !== result.name}
+                    hoveredSessions !== null && hoveredSessions !== result.name}
                 <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <g
-                    onmouseenter={() => (hoveredState = result.name)}
-                    onmouseleave={() => (hoveredState = null)}
+                    onmouseenter={() => (hoveredSessions = result.name)}
+                    onmouseleave={() => (hoveredSessions = null)}
                     class={cls(
                         "transition-opacity duration-200",
                         dimmed && "opacity-[0.15]",
@@ -202,9 +239,9 @@
                             const from = d[result.name] as number;
                             const to = arr[i + 1][result.name] as number;
                             return from > to
-                                ? "url(#gradient-improved)"
+                                ? "url(#sessions-gradient-improved)"
                                 : from < to
-                                  ? "url(#gradient-declined)"
+                                  ? "url(#sessions-gradient-declined)"
                                   : "color-mix(in srgb, var(--color-surface-content) 30%, transparent)";
                         }}
                         strokeWidth={4}
@@ -215,7 +252,7 @@
             <!-- Labels at each point -->
             {#each results as result (result.name)}
                 {@const dimmed =
-                    hoveredState !== null && hoveredState !== result.name}
+                    hoveredSessions !== null && hoveredSessions !== result.name}
                 {#each sessionData as point, i (point.session)}
                     {@const x = context.xScale(point.session)}
                     {@const y = context.yScale(point[result.name])}
@@ -231,8 +268,8 @@
                             "fill-surface-200 transition-opacity duration-200",
                             dimmed && "_opacity-10",
                         )}
-                        onmouseenter={() => (hoveredState = result.name)}
-                        onmouseleave={() => (hoveredState = null)}
+                        onmouseenter={() => (hoveredSessions = result.name)}
+                        onmouseleave={() => (hoveredSessions = null)}
                     />
                     <text
                         {x}
@@ -258,6 +295,7 @@
     {/snippet}
 </Chart>
 
+<h2>Tire Stints</h2>
 <BarChart
     data={chartData}
     x={["start", "end"]}
@@ -265,7 +303,7 @@
     yDomain={driverOrder}
     c="Compound"
     cDomain={["SOFT", "MEDIUM", "HARD"]}
-    cRange={["#da291c", "#ffd12e", "#f0f0ec"]}
+    cRange={Object.values(compoundColors)}
     xBaseline={0}
     xNice={false}
     bandPadding={0.2}
@@ -276,6 +314,7 @@
         tooltip: {
             context: { mode: "bounds" },
         },
+        bars: { rounded: "none", strokeOpacity: 0 },
     }}
 >
     {#snippet tooltip({ context })}
@@ -291,9 +330,13 @@
                     <div
                         class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold border"
                         style="
-                            background-color: {color}20;
-                            border-color: {color};
-                            color: {data.Compound === 'HARD' ? '#111' : '#000'};
+                                background-color: {color}40;
+                                border-color: {color};
+                                color: {isDark
+                            ? '#fff'
+                            : data.Compound === 'HARD'
+                              ? '#333'
+                              : color};
                             "
                     >
                         {data.Compound}
@@ -308,3 +351,161 @@
         {/if}
     {/snippet}
 </BarChart>
+
+<h2>Race Position Changes</h2>
+<Chart
+    data={lapData}
+    x="lap"
+    xScale={scalePoint()}
+    y={driverResults.map((r) => r.name)}
+    yScale={scaleLinear()}
+    yDomain={[maxRank + 0.5, 0.5]}
+    padding={defaultChartPadding({ left: 50, right: 50 })}
+    height={maxRank * rowHeight + 60}
+>
+    {#snippet children({ context })}
+        <Layer>
+            <LinearGradient
+                id="race-gradient-improved"
+                stops={["var(--color-success-700)", "var(--color-success-300)"]}
+            />
+            <LinearGradient
+                id="race-gradient-declined"
+                stops={["var(--color-danger-300)", "var(--color-danger-700)"]}
+            />
+
+            <Axis placement="top" rule={false} />
+            <Axis placement="bottom" rule={false} />
+
+            {#each driverResults as result (result.name)}
+                {@const dimmed =
+                    hoveredRace !== null && hoveredRace !== result.name}
+                <g
+                    onmouseenter={() => (hoveredRace = result.name)}
+                    onmouseleave={() => (hoveredRace = null)}
+                    class={cls(
+                        "transition-opacity duration-200",
+                        dimmed && "opacity-[0.15]",
+                    )}
+                >
+                    <Spline
+                        y={result.name}
+                        curve={curveBumpX}
+                        stroke={(d) => {
+                            const arr = lapData;
+                            const i = arr.findIndex((p) => p.lap === d.lap);
+                            if (i >= arr.length - 1)
+                                return "color-mix(in srgb, var(--color-surface-content) 30%, transparent)";
+                            const from = d[result.name] as number;
+                            const to = arr[i + 1][result.name] as number;
+                            if (from == null || to == null)
+                                return "color-mix(in srgb, var(--color-surface-content) 30%, transparent)";
+                            return from > to
+                                ? "url(#race-gradient-improved)"
+                                : from < to
+                                  ? "url(#race-gradient-declined)"
+                                  : "color-mix(in srgb, var(--color-surface-content) 30%, transparent)";
+                        }}
+                        strokeWidth={4}
+                    />
+                </g>
+            {/each}
+
+            {#each driverResults as result (result.name)}
+                {@const dimmed =
+                    hoveredRace !== null && hoveredRace !== result.name}
+                {@const validPoints = lapData.filter(
+                    (p) => p[result.name] != null,
+                )}
+                {@const firstPoint = validPoints[0]}
+                {@const lastPoint = validPoints[validPoints.length - 1]}
+
+                {#each [firstPoint, lastPoint] as point, i}
+                    {@const x = context.xScale(point.lap)}
+                    {@const y = context.yScale(point[result.name])}
+                    {@const lapIndex = lapData.indexOf(point)}
+                    {@const from =
+                        result.ranks[lapIndex === 0 ? 0 : lapIndex - 1]}
+                    {@const to = result.ranks[lapIndex]}
+                    {@const isFirst = i === 0}
+                    <rect
+                        x={x - 12}
+                        y={y - rowHeight / 2}
+                        width={24}
+                        height={rowHeight}
+                        class={cls(
+                            "fill-surface-200 transition-opacity duration-200",
+                            dimmed && "opacity-10",
+                        )}
+                        onmouseenter={() => (hoveredRace = result.name)}
+                        onmouseleave={() => (hoveredRace = null)}
+                    />
+                    <text
+                        {x}
+                        {y}
+                        text-anchor="middle"
+                        dominant-baseline="central"
+                        pointer-events="none"
+                        class={cls(
+                            "text-[12px] font-semibold font-[monospace] transition-opacity duration-200",
+                            !isFirst && from > to
+                                ? "fill-success"
+                                : !isFirst && from < to
+                                  ? "fill-danger"
+                                  : "fill-surface-content/50",
+                            dimmed && "opacity-10",
+                        )}
+                    >
+                        {result.name}
+                    </text>
+                {/each}
+            {/each}
+        </Layer>
+    {/snippet}
+</Chart>
+
+<h2>Lap Times per Driver</h2>
+<Chart
+    data={sortedViolinData}
+    x="Driver"
+    xScale={scaleBand().padding(0.4)}
+    xDomain={sortedViolinData.map((d) => d.Driver)}
+    y={(d) => d.LapTimes}
+    yScale={scaleLinear()}
+    yNice={true}
+    padding={defaultChartPadding({ left: 50, right: 50 })}
+    height={500}
+    tooltipContext={{ mode: "bounds" }}
+>
+    <Layer>
+        <Axis placement="left" grid rule />
+        <Axis placement="bottom" rule />
+        {#each sortedViolinData as item}
+            <Violin
+                data={item}
+                values="LapTimes"
+                fill={teamColors[item.Team]}
+                stroke={teamColors[item.Team]}
+                strokeWidth={1.5}
+                box
+                median
+            />
+        {/each}
+    </Layer>
+    <Tooltip.Root>
+        {#snippet children({ data })}
+            {@const stats = getStats(data.LapTimes)}
+            <Tooltip.Header value={`${data.Driver} · ${data.Team}`} />
+            <Tooltip.List>
+                <Tooltip.Item label="Max" value={formatLapTime(stats.max)} />
+                <Tooltip.Item label="Q3" value={formatLapTime(stats.q3)} />
+                <Tooltip.Item
+                    label="Median"
+                    value={formatLapTime(stats.median)}
+                />
+                <Tooltip.Item label="Q1" value={formatLapTime(stats.q1)} />
+                <Tooltip.Item label="Min" value={formatLapTime(stats.min)} />
+            </Tooltip.List>
+        {/snippet}
+    </Tooltip.Root>
+</Chart>
